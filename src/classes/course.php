@@ -5,7 +5,7 @@ class Course {
     protected string $titre;
     protected string $description;
     protected string $contenu;
-    protected float $image;
+    protected string $image;
     protected string $type; 
     protected int $idCategory;
     protected int $idTeacher;
@@ -13,7 +13,7 @@ class Course {
     protected array $Students = [];
     
 
-    public function __construct(string $titre,string $description,string $contenu,float $image,string $type,int $idCategory,int $idTeacher,string $date_creation
+    public function __construct(string $titre,string $description,string $contenu,string $image,string $type,int $idCategory,int $idTeacher,string $date_creation
     ) {
         $this->titre = $titre;
         $this->description = $description;
@@ -41,7 +41,7 @@ class Course {
         return $this->contenu;
     }
 
-    public function getImage(): float {
+    public function getImage(): string {
         return $this->image;
     }
 
@@ -73,8 +73,8 @@ class Course {
         $this->contenu = $contenu;
     }
 
-    public function setPrix(float $prix): void {
-        $this->prix = $prix;
+    public function setImage(string $image): void {
+        $this->image = $image;
     }
 
     public function setType(string $type): void {
@@ -103,17 +103,16 @@ class Course {
     }
 
     public function save(PDO $conn):void{
-        $sql = "INSERT into cours (titre ,description,contenu,image,type,idCategory,idTeacher,date_creation);
-        values(?,?,?,?,?,?,?)";
+        $sql = "INSERT into cours (titre ,description,contenu,image,type,idCategory,idTeacher,date_creation) values(?,?,?,?,?,?,?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bindValues(1,$this->titre,PDO::PARAM_STR);
-        $stmt->bindValues(2,$this->description,PDO::PARAM_STR);
-        $stmt->bindValues(3,$this->contenu,PDO::PARAM_STR);
-        $stmt->bindValues(4,$this->image,PDO::PARAM_STR);
-        $stmt->bindValues(5,$this->type,PDO::PARAM_STR);
-        $stmt->bindValues(6,$this->idCategory,PDO::PARAM_INT);
-        $stmt->bindValues(7,$this->idTeacher,PDO::PARAM_INT);
-        $stmt->bindValues(8,$this->date_creation,PDO::PARAM_STR);
+        $stmt->bindValue(1,$this->titre,PDO::PARAM_STR);
+        $stmt->bindValue(2,$this->description,PDO::PARAM_STR);
+        $stmt->bindValue(3,$this->contenu,PDO::PARAM_STR);
+        $stmt->bindValue(4,$this->image,PDO::PARAM_STR);
+        $stmt->bindValue(5,$this->type,PDO::PARAM_STR);
+        $stmt->bindValue(6,$this->idCategory,PDO::PARAM_INT);
+        $stmt->bindValue(7,$this->idTeacher,PDO::PARAM_INT);
+        $stmt->bindValue(8,$this->date_creation,PDO::PARAM_STR);
         $stmt->execute();
     }
 }
