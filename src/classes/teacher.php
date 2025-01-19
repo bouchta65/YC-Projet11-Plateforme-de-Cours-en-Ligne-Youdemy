@@ -10,7 +10,7 @@ class Teacher extends User {
     }
 
     public function addCourse(PDO $conn, string $titre, string $description, string $contenu, string $image, string $type, int $idCategory, int $idTeacher, string $date): void {
-        $course = new Course($titre, $description, $contenu, $image, $type, $idCategory, $idTeacher, $date);
+        $course = new Course(0,$titre, $description, $contenu, $image, $type, $idCategory, $idTeacher, "");
         $course->save($conn);
         $this->loadCourses($conn);
     }
@@ -20,11 +20,36 @@ class Teacher extends User {
         $stmt = $conn->prepare($sql);
         $stmt->bindValue(1, $this->idUser, PDO::PARAM_INT);  
         $stmt->execute();
-        $this->courses = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        $coursesData = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+        $this->courses = [];
+
+        foreach ($coursesData as $course) {
+            $course = new Course(
+                $course['idCours'], 
+                $course['titre'], 
+                $course['description'], 
+                $course['contenu'], 
+                $course['image'], 
+                $course['type'], 
+                $course['idCategory'], 
+                $course['idTeacher'], 
+                $course['date_creation']
+            );
+            $this->courses[] = $course;
+        }
     }
 
     public function getCourses(): array {
         return $this->courses;
+    }
+
+    public function getCourseById(int $courseId): ?Course {
+        foreach ($this->courses as $course) {
+            if ($course->getIdCours() === $courseId) {
+                return $course;
+            }
+        }
+        return null; 
     }
 }
 ?>
