@@ -95,6 +95,12 @@ abstract class Course {
         return $courses;
     }
 
+    public function deleteCourse(PDO $conn){
+        $sql = "DELETE from cours where idCours = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(1,$this->idCours,PDO::PARAM_INT);
+        $stmt->execute();
+    }
 
     abstract public function saveCourse(PDO $conn): void;
     abstract public function getCourseType(): string;
