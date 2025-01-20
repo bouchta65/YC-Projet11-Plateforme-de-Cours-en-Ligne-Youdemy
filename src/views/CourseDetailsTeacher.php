@@ -1,5 +1,15 @@
 
+<?php 
+include "addCourse.php"; 
+if (isset($_GET['id'])) {
+    $courseId = $_GET['id'];
+    $teacher->loadCourses($conn);
+    $course = $teacher->getCourseById($courseId);
 
+} else {
+    echo "No Course ID .";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -329,7 +339,444 @@
 
 
 
-    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="col-span-2 bg-white p-6 rounded-lg shadow-lg space-y-4">
+        <div class="space-y-4 " id="coursDescriptionCont">
+        <h2 id="courseDesTitle" class="text-2xl font-bold text-gray-800">Course Description</h2>
+        <p  class="text-gray-600 leading-relaxed">
+            <?php echo $course->getDescription(); ?>
+        </p>        
+        </div>
+        
+       
+      
+        <div class="mt-4 space-y-2">
+            <div id="contenuFrame" class="hidden">
+          <h3 class="text-2xl font-bold text-gray-800">Content</h3><br>
+          <div class="aspect-w-16 aspect-h-9 bg-black rounded-md overflow-hidden">
+          <?php if($course->getCourseType()== "pdf"){?>
+     
+     <div class="pdf-container bg-gray-100 flex flex-col items-center max-w-full mx-auto p-4">
+     <canvas id="pdf-canvas" class="w-full max-w-full mb-4"></canvas>
+     <div class="pagination flex justify-center items-center gap-4">
+         <button id="prev-page" onclick="changePage(-1)" class="text-xs sm:text-sm md:text-base">
+         Previous
+         </button>
+         <span class="text-xs sm:text-sm md:text-base">Page: <span id="page-num">1</span> / <span id="page-count">1</span></span>
+         <button id="next-page" onclick="changePage(1)" class="text-xs sm:text-sm md:text-base">
+         Next
+         </button>
+     </div>
+     </div>
+     <?php }else{?>
+
+         <div class="">
+             <div class="relative aspect-w-16 aspect-h-9">
+                 <video class="w-full h-full object-cover" controls>
+                     <source src="../../public/<?php echo $course->getContenu(); ?>" type="video/mp4">
+                     Your browser does not support the video tag.
+                 </video>
+             </div>
+        
+         </div>
+     </div>
+         <?php } ?>
+          </div>
+          </div>
+          
+      
+ 
+
+
+          
+   
+
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="text-lg font-semibold text-gray-800">Details</h3>
+          <p class="text-gray-600">Type: <span class="font-medium">Video</span></p>
+          <p class="text-gray-600">Category: <span class="font-medium">Web Development</span></p>
+          <p class="text-gray-600">Date of Creation: <span class="font-medium">2024-01-18</span></p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6">
+  <button
+    class="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M11 17.778l8.072-8.072a2 2 0 000-2.828l-2.828-2.828a2 2 0 00-2.828 0L5.344 12.122a2 2 0 00-.586 1.414V18h4.464a2 2 0 001.414-.586zM16 5l3 3" />
+    </svg>
+    Edit Course
+  </button>
+
+  <button
+    class="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M9 2h6a2 2 0 012 2v2h3a1 1 0 011 1v1a1 1 0 01-1 1h-1v10a2 2 0 01-2 2H8a2 2 0 01-2-2V8H5a1 1 0 01-1-1V6a1 1 0 011-1h3V4a2 2 0 012-2zm0 4v10m6-10v10" />
+    </svg>
+    Delete Course
+  </button>
+
+
+
+</div>
+
+
+       
+      </div>
+
+      <!-- Sidebar -->
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-xl font-bold text-gray-800">Course Summary</h3>
+        <ul class="mt-4 space-y-2">
+          <li class="flex items-center">
+            <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h11M9 21V3m12 3h-7m0 0h7m-7 0v7"></path>
+            </svg>
+            <span class="ml-3 text-gray-700">Beginner Friendly</span>
+          </li>
+          <li class="flex items-center">
+            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M20 6h-8m0 0h8M4 6h4m4 0h4m-4 0h4m0 0v10m0 0h-8m12 0h-4"></path>
+            </svg>
+            <span class="ml-3 text-gray-700">20+ Hours of Content</span>
+          </li>
+          <li class="flex items-center">
+            <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M9 21h6a2 2 0 002-2V5a2 2 0 00-2-2H9a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+            <span class="ml-3 text-gray-700">Certificate of Completion</span>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+        </div>
+    </div>
+</div>
+
+<!-- form of cours type -->
+<form method="POST" action="#" id="courseForm" enctype="multipart/form-data">
+<div id="chooseCourseType" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
+    <div class="bg-white rounded-2xl w-full max-w-3xl p-8 shadow-2xl">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">Choose Course Type</h2>
+        <button id="closeChooseCourseType" class="text-gray-400 hover:text-gray-600 focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <p class="text-gray-600 mb-6">
+        Please select the type of course you want to add. Choose between a video course or a PDF course.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <!-- Video Course Option -->
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-16 h-16 text-blue-500 mb-4">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14m0-4v4m-3 2V8m-4 4h.01M9 9h.01M9 15h.01M13 15h.01M13 9h.01" />
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-700 mb-2">Video Course</h3>
+          <p class="text-gray-500 text-center mb-4">
+            Add an engaging video-based course to enhance learning.
+          </p>
+          <button id="videoCourseButton" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition">
+            Select Video Course
+          </button>
+        </div>
+
+        <!-- PDF Course Option -->
+        <div class="bg-green-50 border border-green-200 rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-16 h-16 text-green-500 mb-4">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 11h4m-6 4h6m2-10a2 2 0 00-2-2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V5z" />
+          </svg>
+          <h3 class="text-xl font-semibold text-gray-700 mb-2">PDF Course</h3>
+          <p class="text-gray-500 text-center mb-4">
+            Share in-depth knowledge with a comprehensive PDF course.
+          </p>
+          <button id="pdfCourseButton"  class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 transition">
+            Select PDF Course
+          </button>
+        </div>
+      </div>
+      <input type="hidden" id="typecourse" name="pdfORvideo" value="">
+
+      <div class="mt-6 text-center">
+        <button id="closeChooseCourseTypeCancel" class="text-gray-500 hover:text-gray-700 underline focus:outline-none">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="CourseModel" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
+  <div id="CourseForm" class="bg-white rounded-lg w-full max-w-[60rem] sm:max-w-3/4 md:max-w-2/3 p-4 sm:p-6 shadow-lg overflow-y-auto" >
+    <div class="flex justify-between items-center mb-4 sm:mb-6">
+      <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">New Course</h2>
+      <button id="closecoursemodel" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+      <div class="w-full max-w-[50rem] sm:w-2/3 space-y-4">
+        <div class="flex flex-col">
+          <label for="Titre_Course" class="font-medium text-gray-600 text-sm sm:text-base">Title</label>
+          <input type="text" id="Titre_Course" name="Titre_Course" class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required placeholder="Ex: First Principles of Machine Learning">
+        </div>
+        
+        <div class="flex flex-col">
+        <label for="Description_Course" class="font-medium text-gray-600 text-sm sm:text-base">Description</label>
+        <!-- Quill Editor Container -->
+        <div id="editor-container" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style="height: 200px;"></div>
+        <!-- Hidden Input to Store HTML Content -->
+        <input type="hidden" id="Description_Course" name="Description_Course">
+        </div>
+
+
+
+        <div class="flex flex-col">
+          <label for="Type_Course" class="font-medium text-gray-600 text-sm sm:text-base">Course Type</label>
+          <select id="Type_Course" name="Type_Course" class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="w-full sm:w-1/3 bg-gray-100 rounded-lg p-4 space-y-4">
+        <div class="flex flex-col">
+          <label for="Tags_Course" class="font-medium text-gray-600 text-sm sm:text-base">Tags</label>
+          <select id="Tags_Course" name="Tags_Course[]" multiple class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <?php 
+            $tags = Tag::getAllTags($conn);
+            foreach($tags as $tag){
+                echo '<option value="'.$tag['idTag'].'">'.$tag['tagName'].'</option>';
+            }
+            ?>
+          </select>
+        </div>
+        <div class="flex flex-col">
+          <label for="Category_Course" class="font-medium text-gray-600 text-sm sm:text-base">Category</label>
+          <select id="Category_Course" name="Category_Course" class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <?php 
+            $categorys = Category::getAllGategorys($conn);
+            foreach($categorys as $category){
+                echo '<option value="'.$category['idCategory'].'">'.$category['categoryName'].'</option>';
+            }
+            ?>
+          </select>
+        </div>
+        
+        <div class="flex flex-col">
+          <label for="Image_Course" class="font-medium text-gray-600 text-sm sm:text-base">Course Image</label>
+          <input type="file" id="Image_Course" name="Image_Course" accept=".jpg, .jpeg, .png"  required class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex flex-col">
+        <label for="File_Course" class="font-medium text-gray-600 text-sm sm:text-base">Course File (PDF)</label>
+        <input type="file" id="File_Course" name="File_Course" accept=".pdf, .mp4, .avi, .mov" required class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 sm:mt-8 flex justify-between space-y-4 sm:space-y-0 sm:flex-row">
+      <button id="closeModalBtn" class="bg-red-500 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">Cancel</button>
+      <input type="submit" value="Validate" name="validateForm" id="validateForm" class="bg-green-600 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+    </div>
+    </div>
+</div>
+</form>
+
+    </main>
+    <script>
+        var quill = new Quill('#editor-container', {
+            theme: 'snow',
+            placeholder: 'Write your course description here...',
+        });
+
+        const form = document.getElementById('courseForm');
+        form.addEventListener('submit', function(event) {
+
+            const descriptionInput = document.getElementById('Description_Course');
+            descriptionInput.value = quill.root.innerHTML; 
+
+            console.log("Description Content: ", descriptionInput.value);
+
+            if (!descriptionInput.value.trim() || descriptionInput.value === '<p><br></p>') {
+                alert('Please provide a valid description.');
+                return;
+            }
+            alert('Form submitted successfully!');
+        });
+    </script>
+
+
+
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../public/assets/js/script.js"></script>
+
+    <script>
+        // start: Sidebar
+        const sidebarToggle = document.querySelector('.sidebar-toggle')
+        const sidebarOverlay = document.querySelector('.sidebar-overlay')
+        const sidebarMenu = document.querySelector('.sidebar-menu')
+        const main = document.querySelector('.main')
+        sidebarToggle.addEventListener('click', function (e) {
+            e.preventDefault()
+            main.classList.toggle('active')
+            sidebarOverlay.classList.toggle('hidden')
+            sidebarMenu.classList.toggle('-translate-x-full')
+        })
+        sidebarOverlay.addEventListener('click', function (e) {
+            e.preventDefault()
+            main.classList.add('active')
+            sidebarOverlay.classList.add('hidden')
+            sidebarMenu.classList.add('-translate-x-full')
+        })
+        document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function (item) {
+            item.addEventListener('click', function (e) {
+                e.preventDefault()
+                const parent = item.closest('.group')
+                if (parent.classList.contains('selected')) {
+                    parent.classList.remove('selected')
+                } else {
+                    document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function (i) {
+                        i.closest('.group').classList.remove('selected')
+                    })
+                    parent.classList.add('selected')
+                }
+            })
+        })
+
+
+
+        const popperInstance = {}
+        document.querySelectorAll('.dropdown').forEach(function (item, index) {
+            const popperId = 'popper-' + index
+            const toggle = item.querySelector('.dropdown-toggle')
+            const menu = item.querySelector('.dropdown-menu')
+            menu.dataset.popperId = popperId
+            popperInstance[popperId] = Popper.createPopper(toggle, menu, {
+                modifiers: [
+                    {
+                        name: 'offset',
+                        options: {
+                            offset: [0, 8],
+                        },
+                    },
+                    {
+                        name: 'preventOverflow',
+                        options: {
+                            padding: 24,
+                        },
+                    },
+                ],
+                placement: 'bottom-end'
+            });
+        })
+        document.addEventListener('click', function (e) {
+            const toggle = e.target.closest('.dropdown-toggle')
+            const menu = e.target.closest('.dropdown-menu')
+            if (toggle) {
+                const menuEl = toggle.closest('.dropdown').querySelector('.dropdown-menu')
+                const popperId = menuEl.dataset.popperId
+                if (menuEl.classList.contains('hidden')) {
+                    hideDropdown()
+                    menuEl.classList.remove('hidden')
+                    showPopper(popperId)
+                } else {
+                    menuEl.classList.add('hidden')
+                    hidePopper(popperId)
+                }
+            } else if (!menu) {
+                hideDropdown()
+            }
+        })
+
+        function hideDropdown() {
+            document.querySelectorAll('.dropdown-menu').forEach(function (item) {
+                item.classList.add('hidden')
+            })
+        }
+        function showPopper(popperId) {
+            popperInstance[popperId].setOptions(function (options) {
+                return {
+                    ...options,
+                    modifiers: [
+                        ...options.modifiers,
+                        { name: 'eventListeners', enabled: true },
+                    ],
+                }
+            });
+            popperInstance[popperId].update();
+        }
+        function hidePopper(popperId) {
+            popperInstance[popperId].setOptions(function (options) {
+                return {
+                    ...options,
+                    modifiers: [
+                        ...options.modifiers,
+                        { name: 'eventListeners', enabled: false },
+                    ],
+                }
+            });
+        }
+        // end: Popper
+
+        
+
+        
+    </script>
+
+    <script>
+        
+let pdfDoc = null;
+let currentPage = 1;
+let totalPages = 1;
+const canvas = document.getElementById('pdf-canvas');
+const ctx = canvas.getContext('2d');
+
+const url = '../../<?php echo $course->getContenu(); ?>'; 
+
+pdfjsLib.getDocument(url).promise.then((pdf) => {
+  pdfDoc = pdf;
+  totalPages = pdf.numPages;
+  document.getElementById('page-count').textContent = totalPages;
+  renderPage(currentPage); 
+});
+
+function renderPage(pageNum) {
+  pdfDoc.getPage(pageNum).then((page) => {
+    const viewport = page.getViewport({ scale: 1 });
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    page.render({
+      canvasContext: ctx,
+      viewport: viewport
+    });
+
+    document.getElementById('page-num').textContent = pageNum;
+  });
+}
+
+function changePage(direction) {
+  if (currentPage + direction > 0 && currentPage + direction <= totalPages) {
+    currentPage += direction;
+    renderPage(currentPage);
+  }
+}
+
     </script>
 
 </body>
