@@ -6,6 +6,11 @@ if (isset($_GET['id'])) {
     $teacher->loadCourses($conn);
     $course = $teacher->getCourseById($courseId);
 
+    if(isset($_POST['deletecourse'])){
+      $course->deleteCourse($conn);
+      header("Location: TeacherCourses.php");
+    }
+
 } else {
     echo "No Course ID .";
 }
@@ -279,7 +284,7 @@ if (isset($_GET['id'])) {
             </div>
             <div class="">
   <div class="max-w-7xl mx-auto space-y-6">
-    <div class="bg-white shadow-lg rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300 ease-in-out">
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden transform  ease-in-out">
   <div class="relative">
     <img 
       src="../../public/<?php echo $course->getImage(); ?>" 
@@ -298,7 +303,9 @@ if (isset($_GET['id'])) {
         <p class="hidden sm:block text-white text-sm sm:text-base md:text-lg opacity-90">
           Category: 
           <span class="font-semibold">
-            <?php echo $teacher->getCategoryById($conn, $course->getIdCategory()); ?>
+            <?php  $category = $teacher->getCategoryById($conn , $course->getIdCategory()); 
+            echo $category->getCategoryName();
+            ?>
           </span>
         </p>
         
@@ -378,7 +385,6 @@ if (isset($_GET['id'])) {
                  </video>
              </div>
         
-         </div>
      </div>
          <?php } ?>
           </div>
@@ -399,10 +405,10 @@ if (isset($_GET['id'])) {
           <p class="text-gray-600">Category: <span class="font-medium">Web Development</span></p>
           <p class="text-gray-600">Date of Creation: <span class="font-medium">2024-01-18</span></p>
         </div>
-
-        <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6">
-  <button
-    class="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center">
+  <form  method="POST" action="" >
+   <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0 mt-6">
+   <button
+    class="w-full sm:w-auto bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 flex items-center justify-center" id="editcoursee" name="editcourse">
     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <path stroke-linecap="round" stroke-linejoin="round"
         d="M11 17.778l8.072-8.072a2 2 0 000-2.828l-2.828-2.828a2 2 0 00-2.828 0L5.344 12.122a2 2 0 00-.586 1.414V18h4.464a2 2 0 001.414-.586zM16 5l3 3" />
@@ -411,17 +417,18 @@ if (isset($_GET['id'])) {
   </button>
 
   <button
-    class="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 flex items-center justify-center">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    class="w-full sm:w-auto bg-red-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 flex items-center justify-center" name="deletecourse" onclick="return confirmDelete()">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" type="submit">
       <path stroke-linecap="round" stroke-linejoin="round"
         d="M9 2h6a2 2 0 012 2v2h3a1 1 0 011 1v1a1 1 0 01-1 1h-1v10a2 2 0 01-2 2H8a2 2 0 01-2-2V8H5a1 1 0 01-1-1V6a1 1 0 011-1h3V4a2 2 0 012-2zm0 4v10m6-10v10" />
     </svg>
     Delete Course
   </button>
 
-
-
 </div>
+
+</form>
+
 
 
        
@@ -460,61 +467,7 @@ if (isset($_GET['id'])) {
     </div>
 </div>
 
-<!-- form of cours type -->
 <form method="POST" action="#" id="courseForm" enctype="multipart/form-data">
-<div id="chooseCourseType" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
-    <div class="bg-white rounded-2xl w-full max-w-3xl p-8 shadow-2xl">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800">Choose Course Type</h2>
-        <button id="closeChooseCourseType" class="text-gray-400 hover:text-gray-600 focus:outline-none">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-
-      <p class="text-gray-600 mb-6">
-        Please select the type of course you want to add. Choose between a video course or a PDF course.
-      </p>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <!-- Video Course Option -->
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-16 h-16 text-blue-500 mb-4">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14m0-4v4m-3 2V8m-4 4h.01M9 9h.01M9 15h.01M13 15h.01M13 9h.01" />
-          </svg>
-          <h3 class="text-xl font-semibold text-gray-700 mb-2">Video Course</h3>
-          <p class="text-gray-500 text-center mb-4">
-            Add an engaging video-based course to enhance learning.
-          </p>
-          <button id="videoCourseButton" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 transition">
-            Select Video Course
-          </button>
-        </div>
-
-        <!-- PDF Course Option -->
-        <div class="bg-green-50 border border-green-200 rounded-xl p-6 flex flex-col items-center hover:shadow-lg transition">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-16 h-16 text-green-500 mb-4">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 11h4m-6 4h6m2-10a2 2 0 00-2-2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V5z" />
-          </svg>
-          <h3 class="text-xl font-semibold text-gray-700 mb-2">PDF Course</h3>
-          <p class="text-gray-500 text-center mb-4">
-            Share in-depth knowledge with a comprehensive PDF course.
-          </p>
-          <button id="pdfCourseButton"  class="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 transition">
-            Select PDF Course
-          </button>
-        </div>
-      </div>
-      <input type="hidden" id="typecourse" name="pdfORvideo" value="">
-
-      <div class="mt-6 text-center">
-        <button id="closeChooseCourseTypeCancel" class="text-gray-500 hover:text-gray-700 underline focus:outline-none">
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-
   <div id="CourseModel" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
   <div id="CourseForm" class="bg-white rounded-lg w-full max-w-[60rem] sm:max-w-3/4 md:max-w-2/3 p-4 sm:p-6 shadow-lg overflow-y-auto" >
     <div class="flex justify-between items-center mb-4 sm:mb-6">
@@ -535,9 +488,7 @@ if (isset($_GET['id'])) {
         
         <div class="flex flex-col">
         <label for="Description_Course" class="font-medium text-gray-600 text-sm sm:text-base">Description</label>
-        <!-- Quill Editor Container -->
         <div id="editor-container" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style="height: 200px;"></div>
-        <!-- Hidden Input to Store HTML Content -->
         <input type="hidden" id="Description_Course" name="Description_Course">
         </div>
 
@@ -590,7 +541,7 @@ if (isset($_GET['id'])) {
 
     <div class="mt-6 sm:mt-8 flex justify-between space-y-4 sm:space-y-0 sm:flex-row">
       <button id="closeModalBtn" class="bg-red-500 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">Cancel</button>
-      <input type="submit" value="Validate" name="validateForm" id="validateForm" class="bg-green-600 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+      <input type="submit" value="Update" name="validateForm" id="validateForm" class="bg-green-600 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
     </div>
     </div>
 </div>
