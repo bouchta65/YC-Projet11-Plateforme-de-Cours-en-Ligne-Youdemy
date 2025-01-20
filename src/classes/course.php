@@ -1,28 +1,28 @@
 <?php
 include "../db/config.php";
-class Course {
+abstract class Course {
     protected int $idCours;
     protected string $titre;
     protected string $description;
-    protected string $contenu;
     protected string $image;
     protected string $type; 
     protected int $idCategory;
     protected int $idTeacher;
     protected string $date_creation;
+    protected string $typeCourse;
     protected array $Students = [];
     
 
-    public function __construct(string $titre,string $description,string $contenu,string $image,string $type,int $idCategory,int $idTeacher,string $date_creation
-    ) {
+    public function __construct(int $idCours, string $titre,string $description,string $image,string $type,int $idCategory,int $idTeacher,string $date_creation,string $typeCourse) {
+        $this->idCours = $idCours;
         $this->titre = $titre;
         $this->description = $description;
-        $this->contenu = $contenu;
         $this->image = $image;
         $this->type = $type;
         $this->idCategory = $idCategory;
         $this->idTeacher = $idTeacher;
         $this->date_creation = $date_creation;
+        $this->typeCourse = $typeCourse;
     }
 
     public function getIdCours(): int {
@@ -35,10 +35,6 @@ class Course {
 
     public function getDescription(): string {
         return $this->description;
-    }
-
-    public function getContenu(): string {
-        return $this->contenu;
     }
 
     public function getImage(): string {
@@ -69,9 +65,6 @@ class Course {
         $this->description = $description;
     }
 
-    public function setContenu(string $contenu): void {
-        $this->contenu = $contenu;
-    }
 
     public function setImage(string $image): void {
         $this->image = $image;
@@ -94,26 +87,20 @@ class Course {
     }
 
     public static function getAllCourses(PDO $conn): array{
-        $sql = "SELECT c.* ,t.*,count(ci.idStudent) as student_count from cours c join courseinscription ci on c.idCours = ci.idCours 
-        join user s on ci.idStudent = s.idUser join user t on  t.idUser = c.idTeacher GROUP BY c.idCours";
+        $sql = " SELECT c.* ,t.username,count(ci.idStudent) as student_count from cours c left join courseinscription ci on c.idCours = ci.idCours 
+       left join user s on ci.idStudent = s.idUser join user t on  t.idUser = c.idTeacher GROUP BY c.idCours";
         $stmt = $conn->prepare($sql);
         $stmt->execute();
         $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $courses;
     }
 
-    public function save(PDO $conn):void{
-        $sql = "INSERT into cours (titre ,description,contenu,image,type,idCategory,idTeacher,date_creation) values(?,?,?,?,?,?,?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(1,$this->titre,PDO::PARAM_STR);
-        $stmt->bindValue(2,$this->description,PDO::PARAM_STR);
-        $stmt->bindValue(3,$this->contenu,PDO::PARAM_STR);
-        $stmt->bindValue(4,$this->image,PDO::PARAM_STR);
-        $stmt->bindValue(5,$this->type,PDO::PARAM_STR);
-        $stmt->bindValue(6,$this->idCategory,PDO::PARAM_INT);
-        $stmt->bindValue(7,$this->idTeacher,PDO::PARAM_INT);
-        $stmt->bindValue(8,$this->date_creation,PDO::PARAM_STR);
-        $stmt->execute();
-    }
+
+    abstract public function saveCourse(PDO $conn): void;
+    abstract public function getCourseType(): string;
+
+    
+
+    
 }
 ?>
