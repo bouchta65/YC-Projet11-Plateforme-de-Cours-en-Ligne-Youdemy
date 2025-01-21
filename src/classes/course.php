@@ -102,8 +102,13 @@ abstract class Course {
         $stmt->execute();
     }
 
+  
+
     abstract public function saveCourse(PDO $conn): void;
+    abstract public function updateCourse(PDO $conn): void;
     abstract public function getCourseType(): string;
+    abstract public function setUrl(string $filrUrl): void;
+    abstract public function getContenu(): string;
 
     
 
