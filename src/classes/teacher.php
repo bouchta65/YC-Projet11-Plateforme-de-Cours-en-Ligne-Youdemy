@@ -8,8 +8,8 @@ require_once "user.php";
 class Teacher extends User {
     private array $courses = []; 
 
-    public function __construct(int $idUser, string $username, string $email, string $password, string $role, string $status) {
-        parent::__construct($idUser, $username, $email, $password, $role, $status);
+    public function __construct(int $idUser, string $username, string $email, string $password, string $role, string $status,string $image, string $address, string $phone) {
+        parent::__construct($idUser, $username, $email, $password, $role, $status,$image,$address,$phone);
     }
 
     public function addCourse(PDO $conn, string $titre, string $description, string $fileUrl, string $type,string $image, int $idCategory, int $idTeacher, string $date, string $typeCourse): void {
