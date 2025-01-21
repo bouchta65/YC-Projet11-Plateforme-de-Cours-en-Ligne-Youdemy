@@ -4,13 +4,12 @@ include "addCourse.php";
 if (isset($_GET['id'])) {
     $courseId = $_GET['id'];
     $teacher->loadCourses($conn);
-    $course = $teacher->getCourseById($courseId);
+    $course = $teacher->getCourseById($conn,$courseId);
 
     if(isset($_POST['deletecourse'])){
       $course->deleteCourse($conn);
       header("Location: TeacherCourses.php");
     }
-
 } else {
     echo "No Course ID .";
 }
@@ -467,7 +466,7 @@ if (isset($_GET['id'])) {
     </div>
 </div>
 
-<form method="POST" action="#" id="courseForm" enctype="multipart/form-data">
+<form method="POST" action="addCourse.php" id="courseForm" enctype="multipart/form-data">
   <div id="CourseModel" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
   <div id="CourseForm" class="bg-white rounded-lg w-full max-w-[60rem] sm:max-w-3/4 md:max-w-2/3 p-4 sm:p-6 shadow-lg overflow-y-auto" >
     <div class="flex justify-between items-center mb-4 sm:mb-6">
@@ -483,13 +482,13 @@ if (isset($_GET['id'])) {
       <div class="w-full max-w-[50rem] sm:w-2/3 space-y-4">
         <div class="flex flex-col">
           <label for="Titre_Course" class="font-medium text-gray-600 text-sm sm:text-base">Title</label>
-          <input type="text" id="Titre_Course" name="Titre_Course" class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required placeholder="Ex: First Principles of Machine Learning">
+          <input type="text" id="Titre_Course" name="Titre_Course" value="<?php echo $course->getTitre(); ?>" class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"  placeholder="Ex: First Principles of Machine Learning">
         </div>
         
         <div class="flex flex-col">
         <label for="Description_Course" class="font-medium text-gray-600 text-sm sm:text-base">Description</label>
         <div id="editor-container" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style="height: 200px;"></div>
-        <input type="hidden" id="Description_Course" name="Description_Course">
+        <input type="hidden" id="Description_Course" name="Description_Course" value="<?php echo htmlspecialchars($course->getDescription()); ?>">
         </div>
 
 
@@ -530,164 +529,62 @@ if (isset($_GET['id'])) {
         
         <div class="flex flex-col">
           <label for="Image_Course" class="font-medium text-gray-600 text-sm sm:text-base">Course Image</label>
-          <input type="file" id="Image_Course" name="Image_Course" accept=".jpg, .jpeg, .png"  required class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <input type="file" id="Image_Course" name="Image_Course" accept=".jpg, .jpeg, .png" value="<?php echo $course->getImage(); ?>"  class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
         <div class="flex flex-col">
         <label for="File_Course" class="font-medium text-gray-600 text-sm sm:text-base">Course File (PDF)</label>
-        <input type="file" id="File_Course" name="File_Course" accept=".pdf, .mp4, .avi, .mov" required class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <input type="file" id="File_Course" name="File_Course" accept=".pdf, .mp4, .avi, .mov"  class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
       </div>
     </div>
 
     <div class="mt-6 sm:mt-8 flex justify-between space-y-4 sm:space-y-0 sm:flex-row">
       <button id="closeModalBtn" class="bg-red-500 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">Cancel</button>
-      <input type="submit" value="Update" name="validateForm" id="validateForm" class="bg-green-600 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+      <button type="submit" value="<?php echo $course->getIdCours(); ?>" name="editForm" class="bg-green-600 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">update</button>
     </div>
     </div>
 </div>
 </form>
 
     </main>
-    <script>
-        var quill = new Quill('#editor-container', {
-            theme: 'snow',
-            placeholder: 'Write your course description here...',
-        });
 
-        const form = document.getElementById('courseForm');
-        form.addEventListener('submit', function(event) {
+<script>
+    var quill = new Quill('#editor-container', {
+        theme: 'snow',
+        placeholder: 'Write your course description here...',
+    });
 
-            const descriptionInput = document.getElementById('Description_Course');
-            descriptionInput.value = quill.root.innerHTML; 
+    const descriptionInput = document.getElementById('Description_Course');
+    const descriptionContent = descriptionInput.value;
 
-            console.log("Description Content: ", descriptionInput.value);
+    if (descriptionContent) {
+        quill.root.innerHTML = descriptionContent;
+    }
 
-            if (!descriptionInput.value.trim() || descriptionInput.value === '<p><br></p>') {
-                alert('Please provide a valid description.');
-                return;
-            }
+    const form = document.getElementById('courseForm');
+    form.addEventListener('submit', function(event) {
+        descriptionInput.value = quill.root.innerHTML;
+
+        console.log("Description Content: ", descriptionInput.value);
+
+        if (!descriptionInput.value.trim() || descriptionInput.value === '<p><br></p>') {
+            alert('Please provide a valid description.');
+            event.preventDefault(); 
+        } else {
             alert('Form submitted successfully!');
-        });
-    </script>
+        }
+    });
+</script>
+
 
 
 
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../public/assets/js/script.js"></script>
+    <script src="../../public/assets/js/dashboard.js"></script>
 
-    <script>
-        // start: Sidebar
-        const sidebarToggle = document.querySelector('.sidebar-toggle')
-        const sidebarOverlay = document.querySelector('.sidebar-overlay')
-        const sidebarMenu = document.querySelector('.sidebar-menu')
-        const main = document.querySelector('.main')
-        sidebarToggle.addEventListener('click', function (e) {
-            e.preventDefault()
-            main.classList.toggle('active')
-            sidebarOverlay.classList.toggle('hidden')
-            sidebarMenu.classList.toggle('-translate-x-full')
-        })
-        sidebarOverlay.addEventListener('click', function (e) {
-            e.preventDefault()
-            main.classList.add('active')
-            sidebarOverlay.classList.add('hidden')
-            sidebarMenu.classList.add('-translate-x-full')
-        })
-        document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function (item) {
-            item.addEventListener('click', function (e) {
-                e.preventDefault()
-                const parent = item.closest('.group')
-                if (parent.classList.contains('selected')) {
-                    parent.classList.remove('selected')
-                } else {
-                    document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function (i) {
-                        i.closest('.group').classList.remove('selected')
-                    })
-                    parent.classList.add('selected')
-                }
-            })
-        })
-
-
-
-        const popperInstance = {}
-        document.querySelectorAll('.dropdown').forEach(function (item, index) {
-            const popperId = 'popper-' + index
-            const toggle = item.querySelector('.dropdown-toggle')
-            const menu = item.querySelector('.dropdown-menu')
-            menu.dataset.popperId = popperId
-            popperInstance[popperId] = Popper.createPopper(toggle, menu, {
-                modifiers: [
-                    {
-                        name: 'offset',
-                        options: {
-                            offset: [0, 8],
-                        },
-                    },
-                    {
-                        name: 'preventOverflow',
-                        options: {
-                            padding: 24,
-                        },
-                    },
-                ],
-                placement: 'bottom-end'
-            });
-        })
-        document.addEventListener('click', function (e) {
-            const toggle = e.target.closest('.dropdown-toggle')
-            const menu = e.target.closest('.dropdown-menu')
-            if (toggle) {
-                const menuEl = toggle.closest('.dropdown').querySelector('.dropdown-menu')
-                const popperId = menuEl.dataset.popperId
-                if (menuEl.classList.contains('hidden')) {
-                    hideDropdown()
-                    menuEl.classList.remove('hidden')
-                    showPopper(popperId)
-                } else {
-                    menuEl.classList.add('hidden')
-                    hidePopper(popperId)
-                }
-            } else if (!menu) {
-                hideDropdown()
-            }
-        })
-
-        function hideDropdown() {
-            document.querySelectorAll('.dropdown-menu').forEach(function (item) {
-                item.classList.add('hidden')
-            })
-        }
-        function showPopper(popperId) {
-            popperInstance[popperId].setOptions(function (options) {
-                return {
-                    ...options,
-                    modifiers: [
-                        ...options.modifiers,
-                        { name: 'eventListeners', enabled: true },
-                    ],
-                }
-            });
-            popperInstance[popperId].update();
-        }
-        function hidePopper(popperId) {
-            popperInstance[popperId].setOptions(function (options) {
-                return {
-                    ...options,
-                    modifiers: [
-                        ...options.modifiers,
-                        { name: 'eventListeners', enabled: false },
-                    ],
-                }
-            });
-        }
-        // end: Popper
-
-        
-
-        
-    </script>
+   
 
     <script>
         
