@@ -26,9 +26,31 @@ class CourseVideo extends Course {
         $stmt->execute();
     }
 
+    public function updateCourse(PDO $conn):void{
+        $sql = "UPDATE cours SET  titre = ?, description = ?, contenu = ?, type = ?, image = ?, idCategory = ?, idTeacher = ?,  date_creation = ? 
+    WHERE idCours = ?;";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(1, $this->titre, PDO::PARAM_STR);
+        $stmt->bindValue(2, $this->description, PDO::PARAM_STR);
+        $stmt->bindValue(3, $this->videoUrl, PDO::PARAM_STR);
+        $stmt->bindValue(4, $this->type, PDO::PARAM_STR);
+        $stmt->bindValue(5, $this->image, PDO::PARAM_STR);
+        $stmt->bindValue(6, $this->idCategory, PDO::PARAM_INT);
+        $stmt->bindValue(7, $this->idTeacher, PDO::PARAM_INT);
+        $stmt->bindValue(8, $this->typeCourse, PDO::PARAM_STR);
+        $stmt->bindValue(8, $this->idCours, PDO::PARAM_STR);
+
+        $stmt->execute();
+    }
+
     public function getCourseType(): string {
         return "Video";
     }
+
+    public function setURL(string $videoUrl): void {
+        $this->videoUrl = $videoUrl;
+    }
+
     public function getContenu(): string {
         return $this->videoUrl;
     }
