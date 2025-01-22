@@ -1,394 +1,288 @@
+
 <?php 
-include "../classes/course.php";
+
+session_start();
+require_once '../db/config.php';
+require_once '../classes/course.php';
+require_once '../classes/teacher.php';
+require_once '../classes/category.php';
+
+
+$isLoggedIn = isset($_SESSION['user']);
+if($isLoggedIn){
+    $user = unserialize($_SESSION['user']);
+
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <title>EduWeb - The Best Program to Enroll for Exchange</title>
-  <meta name="title" content="EduWeb - The Best Program to Enroll for Exchange">
-  <meta name="description" content="This is an education html template made by codewithsadee">
-
-  <link rel="shortcut icon" href="../../favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="../../public/assets/css/style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800&family=Poppins:wght@400;500&display=swap"
-    rel="stylesheet">
-  <link rel="preload" as="image" href="../../public/assets/images/hero-bg.svg">
-  <link rel="preload" as="image" href="../../public/assets/images/hero-banner-1.jpg">
-  <link rel="preload" as="image" href="../../public/assets/images/hero-banner-2.jpg">
-  <link rel="preload" as="image" href="../../public/assets/images/hero-shape-1.svg">
-  <link rel="preload" as="image" href="../../public/assets/images/hero-shape-2.png">
-
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <link rel="stylesheet" href="../../public/assets/css/dashboard.css">
+    <title>EduWeb Plateforme de Cours en Ligne </title>
 </head>
+<body class="text-gray-800 font-inter">
+    <!--sidenav -->
+    <div class="fixed left-0 top-0 w-64 h-full bg-[#f8f4f3] p-4 z-50 sidebar-menu transition-transform">
+        <a href="../../index.php" class="flex items-center pb-4 border-b border-b-gray-800">
 
-<body id="top">
-
-  <header class="header" data-header>
-    <div class="container">
-
-      <a href="#" class="logo">
         <img src="../../public/assets/images/logo.svg" width="162" height="50" alt="EduWeb logo">
-      </a>
+        </a>
+        <ul class="mt-4">
+            <?php if($user->getRole()=="Teacher"){?>
+            <span class="text-gray-400 font-bold">Teacher</span>
+            <li class="mb-1 group">
+                <a href="dashboard.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            
+            <li class="mb-1 group">
+                <a href="Profile.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 ">
+                    <i class='bx bx-user mr-3 text-lg'></i>                
+                    <span class="text-sm">Profile</span>
+                </a>
+            </li>
+            <span class="text-gray-400 font-bold">Coures</span>
+            <li class="mb-1 group">
+                <a href="TeacherCourses.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class='bx bx-archive mr-3 text-lg'></i>                
+                    <span class="text-sm">My Courses</span>
+                </a>
+            </li>
+                    <li class="mb-1 group">
+            <a href="courses.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 bg-gray-950 text-white rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <i class='bx bx-book mr-3 text-lg'></i>                
+                <span class="text-sm">All Courses</span>
+            </a>
+        </li>
+        <?php }elseif($user->getRole()=="Student"){?>
+            <span class="text-gray-400 font-bold">User</span>
+            <li class="mb-1 group">
+                <a href="Profile.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 ">
+                    <i class='bx bx-user mr-3 text-lg'></i>                
+                    <span class="text-sm">Profile</span>
+                </a>
+            </li>
+            <span class="text-gray-400 font-bold">Coures</span>
+            <li class="mb-1 group">
+                <a href="studentCourses.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class='bx bx-archive mr-3 text-lg'></i>                
+                    <span class="text-sm">My Courses</span>
+                </a>
+            </li>
+                    <li class="mb-1 group">
+            <a href="courses.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 bg-gray-950 text-white rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <i class='bx bx-book mr-3 text-lg'></i>                
+                <span class="text-sm">All Courses</span>
+            </a>
+        </li>
+        <?php }else{?>
+            <span class="text-gray-400 font-bold">ADMIN</span>
+            <li class="mb-1 group">
+                <a href="dashboard.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class="ri-home-2-line mr-3 text-lg"></i>
+                    <span class="text-sm">Dashboard</span>
+                </a>
+            </li>
+            
+            <li class="mb-1 group">
+                <a href="Profile.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 ">
+                    <i class='bx bx-user mr-3 text-lg'></i>                
+                    <span class="text-sm">Profile</span>
+                </a>
+            </li>
+            <li class="mb-1 group">
+                <a href="users.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 ">
+                    <i class='bx bx-user mr-3 text-lg'></i>                
+                    <span class="text-sm">Users</span>
+                </a>
+            </li>
+            <span class="text-gray-400 font-bold">Coures</span>
+                    <li class="mb-1 group">
+            <a href="courses.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 bg-gray-950 text-white rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <i class='bx bx-book mr-3 text-lg'></i>                
+                <span class="text-sm">All Courses</span>
+            </a>
+        </li>
+            <?php }?>
+          
+        </ul>
+    </div>
+    <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
+    <!-- end sidenav -->
 
-      <nav class="navbar" data-navbar>
+    <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main">
+        <!-- navbar -->
+        <div class="py-2 px-6 bg-[#f8f4f3] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
+            <button type="button" class="text-lg text-gray-900 font-semibold sidebar-toggle">
+                <i class="ri-menu-line"></i>
+            </button>
 
-        <div class="wrapper">
-          <a href="#" class="logo">
-            <img src="./public/assets/images/logo.svg" width="162" height="50" alt="EduWeb logo">
-          </a>
+            <ul class="ml-auto flex items-center">
+                <li class="mr-1 dropdown">
+                    <button type="button" class="dropdown-toggle text-gray-400 mr-4 w-8 h-8 rounded flex items-center justify-center  hover:text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="hover:bg-gray-100 rounded-full" viewBox="0 0 24 24" style="fill: gray;"><path d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"></path></svg>                    
+                    </button>
+                    <div class="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
+                        <form action="" class="p-4 border-b border-b-gray-100">
+                            <div class="relative w-full">
+                                <input type="text" class="py-2 pr-4 pl-10 bg-gray-50 w-full outline-none border border-gray-100 rounded-md text-sm focus:border-blue-500" placeholder="Search...">
+                                <i class="ri-search-line absolute top-1/2 left-4 -translate-y-1/2 text-gray-900"></i>
+                            </div>
+                        </form>
+                    </div>
+                </li>
+             
+                <button id="fullscreen-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="hover:bg-gray-100 rounded-full" viewBox="0 0 24 24" style="fill: gray;"><path d="M5 5h5V3H3v7h2zm5 14H5v-5H3v7h7zm11-5h-2v5h-5v2h7zm-2-4h2V3h-7v2h5z"></path></svg>
+                </button>
+                <script>
+                    const fullscreenButton = document.getElementById('fullscreen-button');
+                
+                    fullscreenButton.addEventListener('click', toggleFullscreen);
+                
+                    function toggleFullscreen() {
+                        if (document.fullscreenElement) {
+                            document.exitFullscreen();
+                        } else {
+                            document.documentElement.requestFullscreen();
+                        }
+                    }
+                </script>
 
-          <button class="nav-close-btn" aria-label="close menu" data-nav-toggler>
-            <ion-icon name="close-outline" aria-hidden="true"></ion-icon>
-          </button>
+                <li class="dropdown ml-3">
+                    <button type="button" class="dropdown-toggle flex items-center">
+                        <div class="flex-shrink-0 w-10 h-10 relative">
+                            <div class="p-1 bg-white rounded-full focus:outline-none focus:ring">
+                                <img class="w-8 h-8 rounded-full" src="../../public/<?php echo $user->getImage()?>" alt=""/>
+                                <div class="top-0 left-7 absolute w-3 h-3 bg-lime-400 border-2 border-white rounded-full animate-ping"></div>
+                                <div class="top-0 left-7 absolute w-3 h-3 bg-lime-500 border-2 border-white rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="p-2 md:block text-left">
+                            <h2 class="text-sm font-semibold text-gray-800"><?php echo $user->getusername()?></h2>
+                            <p class="text-xs text-gray-500"><?php echo $user->getRole()?></p>
+                        </div>                
+                    </button>
+                    <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+                        <li>
+                            <a href="#" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50">Profile</a>
+                        </li>
+                        <li>
+                            <form method="POST" action="">
+                                <a href="logout.php" role="menuitem" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer">
+                                    Log Out
+                                </a>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
 
-        <ul class="navbar-list">
-
-          <li class="navbar-item">
-            <a href="#home" class="navbar-link" data-nav-link>Home</a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="#about" class="navbar-link" data-nav-link>About</a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="#courses" class="navbar-link" data-nav-link>Courses</a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="#blog" class="navbar-link" data-nav-link>Blog</a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="#" class="navbar-link" data-nav-link>Contact</a>
-          </li>
-
-        </ul>
-
-      </nav>
-
-      <div class="header-actions">
-
-        <a href="src/views/login.php" class="btn has-before">
-          <span class="span">Login now</span>
-
-          <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-        </a>
-
-        <button class="header-action-btn" aria-label="open menu" data-nav-toggler>
-          <ion-icon name="menu-outline" aria-hidden="true"></ion-icon>
-        </button>
-
-      </div>
-
-      <div class="overlay" data-nav-toggler data-overlay></div>
-
+ 
+<div class="p-6">
+    <div class="w-full mb-6">
+        <div class="bg-white border border-gray-100 shadow-md shadow-black/5 p-6 rounded-md">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-semibold text-gray-800">All Courses</h1>
+               
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <?php 
+                $courses = Course::getAllCourses($conn);
+                foreach($courses as $course){
+                    $badgeColor = '';
+                    switch ($course['type']) {
+                        case 'Beginner':
+                            $badgeColor = 'bg-green-500'; 
+                            break;
+                        case 'Intermediate':
+                            $badgeColor = 'bg-yellow-500';
+                            break;
+                        case 'Advanced':
+                            $badgeColor = 'bg-red-500'; 
+                            break;
+                        default:
+                            $badgeColor = 'bg-gray-500'; 
+                            break;
+                    }
+                    echo '
+                    <div class="max-w-xs bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                        <!-- Header Image -->
+                        <div class="relative">
+                            <a href="CourseDetails.php?id='.$course['idCours'].'">
+                                <img src="../../public/'.$course['image'].'" alt="Course Image" class="w-full h-48 object-cover">
+                            </a>
+                            <!-- Badge (e.g., Beginner) -->
+                              <div class="absolute top-4 left-4 ' . $badgeColor . ' text-white text-xs font-semibold px-3 py-1 rounded-full">
+                                ' . $course['type'] . '
+                            </div>
+                      
+                        </div>
+                
+                        <!-- Course Details -->
+                        <div class="p-4">
+                            <!-- Title -->
+                            <h3 class="text-lg font-semibold text-gray-800 mb-2 truncate">
+                                '.$course['titre'].'
+                            </h3>
+                
+                            <!-- Metadata -->
+                            <div class="text-sm text-gray-600 space-y-1">
+                                <!-- Teacher Name -->
+                                <div class="flex items-center">
+                                    <i class="ri-user-line mr-2"></i>
+                                    <span>by: '.$course['username'].'</span>
+                                </div>
+                                <!-- Student Count -->
+                                <div class="flex items-center">
+                                    <i class="ri-group-line mr-2"></i>
+                                    <span>'.$course['student_count'].' Students</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    ';
+                }
+            
+                
+                ?>
+            </div>
+        </div>
     </div>
-  </header>
-
-
-
-
-
-  <main>
-    <article>
-    <br>
-    <br>
-    <br>
-    
-    <div class="course-top-bar">
-  <div class="course-search-sort">
-    <!-- Search Bar -->
-    <div class="course-search">
-      <input type="text" placeholder="Search for courses..." class="course-search-input">
-      <button class="course-search-btn">
-        <ion-icon name="search-outline"></ion-icon>
-      </button>
-    </div>
-
-    <!-- Sort Dropdown -->
-    <div class="course-sort">
-      <select class="course-sort-select">
-        <option value="category">Sort by Category</option>
-      </select>
-    </div>
-    <div class="course-sort">
-      <select class="course-sort-select">
-        <option value="category">Sort by Tag</option>
-      </select>
-    </div>
-    <div class="course-sort">
-      <select class="course-sort-select">
-        <option value="category">Sort by Date</option>
-      </select>
-    </div>
-  </div>
 </div>
 
 
+    </main>
 
-      <section class="section course" id="courses" aria-label="course">
-        <div class="container">      
-                <ul class="grid-list">
-                <?php 
-                $courses = Course::getAllCourses($conn);
-                
-                foreach($courses as $course ){
-        echo '
-         <li>
-              <div class="course-card">
 
-                <figure class="card-banner img-holder" style="--width: 370; --height: 220;">
-                  <img src="../../public/assets/images/course-1.jpg" width="370" height="220" loading="lazy"
-                    alt="Build Responsive Real- World Websites with HTML and CSS" class="img-cover">
-                </figure>
 
-                <div class="abs-badge">
-                  <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
 
-                  <span class="span">'.$course['date_creation'].'</span>
-                </div>
 
-                <div class="card-content">
 
-                  <span class="badge">'.$course['type'].'</span>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../public/assets/js/script.js"></script>
+    <script src="../../public/assets/js/dashboard.js"></script>
 
-                  <h3 class="h3">
-                    <a href="#" class="card-title">'.$course['titre'].'</a>
-                  </h3>
+   
 
-                  <data class="price">'.$course['description'].'</data>
-
-                  <ul class="card-meta-list">
-
-                    <li class="card-meta-item">
-                      <ion-icon name="library-outline" aria-hidden="true"></ion-icon>
-
-                      <span class="span">by: '.$course['username'].'</span>
-                    </li>
-
-                    <li class="card-meta-item">
-                      <ion-icon name="people-outline" aria-hidden="true"></ion-icon>
-
-                      <span class="span">'.$course['student_count'].' Students</span>
-                    </li>
-
-                  </ul>
-
-                </div>
-
-              </div>
-            </li>';
-         }
-        ?>
-
-          </ul>
-        </div>
-      </section>
-
-
-  <!-- 
-    - #FOOTER
-  -->
-
-  <footer class="footer" style="background-image: url('./public/assets/images/footer-bg.png')">
-
-    <div class="footer-top section">
-      <div class="container grid-list">
-
-        <div class="footer-brand">
-
-          <a href="#" class="logo">
-            <img src="./public/assets/images/logo-light.svg" width="162" height="50" alt="EduWeb logo">
-          </a>
-
-          <p class="footer-brand-text">
-            Lorem ipsum dolor amet consecto adi pisicing elit sed eiusm tempor incidid unt labore dolore.
-          </p>
-
-          <div class="wrapper">
-            <span class="span">Add:</span>
-
-            <address class="address">70-80 Upper St Norwich NR2</address>
-          </div>
-
-          <div class="wrapper">
-            <span class="span">Call:</span>
-
-            <a href="tel:+011234567890" class="footer-link">+01 123 4567 890</a>
-          </div>
-
-          <div class="wrapper">
-            <span class="span">Email:</span>
-
-            <a href="mailto:info@eduweb.com" class="footer-link">info@eduweb.com</a>
-          </div>
-
-        </div>
-
-        <ul class="footer-list">
-
-          <li>
-            <p class="footer-list-title">Online Platform</p>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">About</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Courses</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Instructor</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Events</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Instructor Profile</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Purchase Guide</a>
-          </li>
-
-        </ul>
-
-        <ul class="footer-list">
-
-          <li>
-            <p class="footer-list-title">Links</p>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Contact Us</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Gallery</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">News & Articles</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">FAQ's</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Sign In/Registration</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Coming Soon</a>
-          </li>
-
-        </ul>
-
-        <div class="footer-list">
-
-          <p class="footer-list-title">Contacts</p>
-
-          <p class="footer-list-text">
-            Enter your email address to register to our newsletter subscription
-          </p>
-
-          <form action="" class="newsletter-form">
-            <input type="email" name="email_address" placeholder="Your email" required class="input-field">
-
-            <button type="submit" class="btn has-before">
-              <span class="span">Subscribe</span>
-
-              <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
-            </button>
-          </form>
-
-          <ul class="social-list">
-
-            <li>
-              <a href="#" class="social-link">
-                <ion-icon name="logo-facebook"></ion-icon>
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="social-link">
-                <ion-icon name="logo-linkedin"></ion-icon>
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="social-link">
-                <ion-icon name="logo-instagram"></ion-icon>
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="social-link">
-                <ion-icon name="logo-twitter"></ion-icon>
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="social-link">
-                <ion-icon name="logo-youtube"></ion-icon>
-              </a>
-            </li>
-
-          </ul>
-
-        </div>
-
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <div class="container">
-
-        <p class="copyright">
-          Copyright 2022 All Rights Reserved by <a href="#" class="copyright-link">codewithsadee</a>
-        </p>
-
-      </div>
-    </div>
-
-  </footer>
-
-
-
-
-
-  <!-- 
-    - #BACK TO TOP
-  -->
-
-  <a href="#top" class="back-top-btn" aria-label="back top top" data-back-top-btn>
-    <ion-icon name="chevron-up" aria-hidden="true"></ion-icon>
-  </a>
-
-
-
-
-
-  <script src="./public/assets/js/script.js" defer></script>
-
-
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+   
 
 </body>
-
 </html>
