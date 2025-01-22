@@ -124,13 +124,14 @@ abstract class User{
             if(password_verify($password,$user['password'])){
                 if($user['role']=="Student"){
                     $_SESSION['user'] = serialize(new Student($user['idUser'],$user['username'],$user['email'],$user['password'],$user['role'],$user['statut'],$user['image'],$user['address'],$user['phone']));
+                    header('Location: ../views/courses.php'); 
                 }else if($user['role']=="Teacher"){
                     $_SESSION['user'] = serialize(new Teacher($user['idUser'],$user['username'],$user['email'],$user['password'],$user['role'],$user['statut'],$user['image'],$user['address'],$user['phone']));
                     echo "good";
                     header('Location: ../views/TeacherCourses.php'); 
                 }else{
-                    $_SESSION['user'] = serialize(new Admin($user['idUser'],$user['username'],$user['email'],$user['password'],$user['role'],$user['statut']),$user['image'],$user['address'],$user['phone']);
-
+                    $_SESSION['user'] = serialize(new Admin($user['idUser'],$user['username'],$user['email'],$user['password'],$user['role'],$user['statut'],$user['image'],$user['address'],$user['phone']));
+                    header('Location: ../views/dashboard.php'); 
                 }
             }else {
                 echo "Incorrect password!";
@@ -180,6 +181,19 @@ abstract class User{
         header("Location: ../../index.php");
         exit();
     }
+
+    public function updateProfile($conn): void {
+        $sql = "UPDATE user SET username = ?, email = ?, address = ?, phone = ? WHERE idUser = ?";
+        $stmt = $conn->prepare($sql);
+        
+        $stmt->bindValue(1, $this->username, PDO::PARAM_STR);
+        $stmt->bindValue(2, $this->email, PDO::PARAM_STR);
+        $stmt->bindValue(3, $this->address, PDO::PARAM_STR);
+        $stmt->bindValue(4, $this->phone, PDO::PARAM_STR);
+        $stmt->bindValue(5, $this->idUser, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+    
 
 
     
