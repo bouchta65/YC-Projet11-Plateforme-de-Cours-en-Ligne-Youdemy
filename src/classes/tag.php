@@ -31,5 +31,14 @@ class Tag {
         $tags = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $tags;
     }
+
+    public function saveTag($conn) {
+        $sql = "INSERT INTO tag (tagName) VALUES (?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(1, $this->tagName, PDO::PARAM_STR);  
+        $stmt->execute();
+    }
+
+    
 }
 ?>
