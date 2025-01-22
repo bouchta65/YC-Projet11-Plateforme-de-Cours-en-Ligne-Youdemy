@@ -1,6 +1,6 @@
 
 <?php 
-include "addCourse.php"; 
+require_once "addEditCourse.php"; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,58 +29,41 @@ include "addCourse.php";
         <ul class="mt-4">
             <span class="text-gray-400 font-bold">ADMIN</span>
             <li class="mb-1 group">
-                <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <a href="dashboard.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100  rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
                     <i class="ri-home-2-line mr-3 text-lg"></i>
                     <span class="text-sm">Dashboard</span>
                 </a>
             </li>
+            
             <li class="mb-1 group">
-                <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
+                <a href="Profile.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 ">
                     <i class='bx bx-user mr-3 text-lg'></i>                
                     <span class="text-sm">Profile</span>
                 </a>
             </li>
-            <li class="mb-1 group">
-                <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-                    <i class='bx bx-list-ul mr-3 text-lg'></i>                
-                    <span class="text-sm">Activities</span>
-                </a>
-            </li>
             <span class="text-gray-400 font-bold">Coures</span>
+
             <li class="mb-1 group">
-            <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 sidebar-dropdown-toggle">
-                    <i class='bx bxl-blogger mr-3 text-lg' ></i>                 
+         
+
+            <li class="mb-1 group">
+                <a href="TeacherCourses.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 bg-gray-950 text-white rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                    <i class='bx bx-archive mr-3 text-lg'></i>                
                     <span class="text-sm">My Courses</span>
                 </a>
             </li>
             <li class="mb-1 group">
-                <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-                    <i class='bx bx-archive mr-3 text-lg'></i>                
-                    <span class="text-sm">Archive</span>
-                </a>
-            </li>
-            <span class="text-gray-400 font-bold">PERSONAL</span>
-            <li class="mb-1 group">
-                <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-                    <i class='bx bx-bell mr-3 text-lg' ></i>                
-                    <span class="text-sm">Notifications</span>
-                    <span class=" md:block px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-red-600 bg-red-200 rounded-full">5</span>
-                </a>
-            </li>
-            <li class="mb-1 group">
-                <a href="" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
-                    <i class='bx bx-envelope mr-3 text-lg' ></i>                
-                    <span class="text-sm">Messages</span>
-                    <span class=" md:block px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-green-600 bg-green-200 rounded-full">2 New</span>
-                </a>
-            </li>
+            <a href="courses.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100">
+                <i class='bx bx-book mr-3 text-lg'></i>                
+                <span class="text-sm">All Courses</span>
+            </a>
+        </li>
+          
         </ul>
     </div>
     <div class="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"></div>
-    <!-- end sidenav -->
 
     <main class="w-full md:w-[calc(100%-256px)] md:ml-64 bg-gray-200 min-h-screen transition-all main">
-        <!-- navbar -->
         <div class="py-2 px-6 bg-[#f8f4f3] flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
             <button type="button" class="text-lg text-gray-900 font-semibold sidebar-toggle">
                 <i class="ri-menu-line"></i>
@@ -217,10 +200,8 @@ include "addCourse.php";
                 
                     function toggleFullscreen() {
                         if (document.fullscreenElement) {
-                            // If already in fullscreen, exit fullscreen
                             document.exitFullscreen();
                         } else {
-                            // If not in fullscreen, request fullscreen
                             document.documentElement.requestFullscreen();
                         }
                     }
@@ -230,14 +211,14 @@ include "addCourse.php";
                     <button type="button" class="dropdown-toggle flex items-center">
                         <div class="flex-shrink-0 w-10 h-10 relative">
                             <div class="p-1 bg-white rounded-full focus:outline-none focus:ring">
-                                <img class="w-8 h-8 rounded-full" src="https://laravelui.spruko.com/tailwind/ynex/build/assets/images/faces/9.jpg" alt=""/>
+                                <img class="w-8 h-8 rounded-full" src="<?php echo $teacher->getImage(); ?>" alt=""/>
                                 <div class="top-0 left-7 absolute w-3 h-3 bg-lime-400 border-2 border-white rounded-full animate-ping"></div>
                                 <div class="top-0 left-7 absolute w-3 h-3 bg-lime-500 border-2 border-white rounded-full"></div>
                             </div>
                         </div>
                         <div class="p-2 md:block text-left">
-                            <h2 class="text-sm font-semibold text-gray-800">John Doe</h2>
-                            <p class="text-xs text-gray-500">Administrator</p>
+                            <h2 class="text-sm font-semibold text-gray-800"><?php echo $teacher->getusername(); ?></h2>
+                            <p class="text-xs text-gray-500"><?php echo $teacher->getRole(); ?></p>
                         </div>                
                     </button>
                     <ul class="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
@@ -249,9 +230,7 @@ include "addCourse.php";
                         </li>
                         <li>
                             <form method="POST" action="">
-                                <a role="menuitem" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer"
-                                    onclick="event.preventDefault();
-                                    this.closest('form').submit();">
+                                <a href="logout.php" role="menuitem" class="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer">
                                     Log Out
                                 </a>
                             </form>
@@ -294,7 +273,6 @@ include "addCourse.php";
     </div>
 </div>
 
-<!-- form of cours type -->
 <form method="POST" action="#" id="courseForm" enctype="multipart/form-data">
 <div id="chooseCourseType" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
     <div class="bg-white rounded-2xl w-full max-w-3xl p-8 shadow-2xl">
@@ -430,6 +408,75 @@ include "addCourse.php";
 </div>
 </form>
 
+<div id="CourseModel" class="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50 hidden">
+  <div id="CourseForm" class="bg-white rounded-lg w-full max-w-[60rem] sm:max-w-3/4 md:max-w-2/3 p-4 sm:p-6 shadow-lg overflow-y-auto" >
+    <div class="flex justify-between items-center mb-4 sm:mb-6">
+      <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">New Course</h2>
+      <button id="closecoursemodel" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+      <div class="w-full max-w-[50rem] sm:w-2/3 space-y-4">
+        <div class="flex flex-col">
+          <label for="Titre_Course" class="font-medium text-gray-600 text-sm sm:text-base">Title</label>
+          <input type="text" id="Titre_Course" name="Titre_Course" class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required placeholder="Ex: First Principles of Machine Learning">
+        </div>
+        
+        <div class="flex flex-col">
+        <label for="Description_Course" class="font-medium text-gray-600 text-sm sm:text-base">Description</label>
+        <!-- Quill Editor Container -->
+        <div id="editor-container" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" style="height: 200px;"></div>
+        <!-- Hidden Input to Store HTML Content -->
+        <input type="hidden" id="Description_Course" name="Description_Course">
+        </div>
+
+
+
+        <div class="flex flex-col">
+          <label for="Type_Course" class="font-medium text-gray-600 text-sm sm:text-base">Course Type</label>
+          <select id="Type_Course" name="Type_Course" class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advanced">Advanced</option>
+          </select>
+        </div>
+      </div>
+
+ 
+        <div class="flex flex-col">
+          <label for="Category_Course" class="font-medium text-gray-600 text-sm sm:text-base">Category</label>
+          <select id="Category_Course" name="Category_Course" class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <?php 
+            $categorys = Category::getAllGategorys($conn);
+            foreach($categorys as $category){
+                echo '<option value="'.$category['idCategory'].'">'.$category['categoryName'].'</option>';
+            }
+            ?>
+          </select>
+        </div>
+        
+        <div class="flex flex-col">
+          <label for="Image_Course" class="font-medium text-gray-600 text-sm sm:text-base">Course Image</label>
+          <input type="file" id="Image_Course" name="Image_Course" accept=".jpg, .jpeg, .png"  required class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="flex flex-col">
+        <label for="File_Course" class="font-medium text-gray-600 text-sm sm:text-base">Course File (PDF)</label>
+        <input type="file" id="File_Course" name="File_Course" accept=".pdf, .mp4, .avi, .mov" required class="mt-2 p-2 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-6 sm:mt-8 flex justify-between space-y-4 sm:space-y-0 sm:flex-row">
+      <button id="closeModalBtn" class="bg-red-500 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500">Cancel</button>
+      <input type="submit" value="Validate" name="validateForm" id="validateForm" class="bg-green-600 text-white py-2 sm:py-3 px-6 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+    </div>
+    </div>
+</div>
+
     </main>
     <script>
         var quill = new Quill('#editor-container', {
@@ -458,114 +505,10 @@ include "addCourse.php";
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../../public/assets/js/script.js"></script>
-
-    <script>
-        // start: Sidebar
-        const sidebarToggle = document.querySelector('.sidebar-toggle')
-        const sidebarOverlay = document.querySelector('.sidebar-overlay')
-        const sidebarMenu = document.querySelector('.sidebar-menu')
-        const main = document.querySelector('.main')
-        sidebarToggle.addEventListener('click', function (e) {
-            e.preventDefault()
-            main.classList.toggle('active')
-            sidebarOverlay.classList.toggle('hidden')
-            sidebarMenu.classList.toggle('-translate-x-full')
-        })
-        sidebarOverlay.addEventListener('click', function (e) {
-            e.preventDefault()
-            main.classList.add('active')
-            sidebarOverlay.classList.add('hidden')
-            sidebarMenu.classList.add('-translate-x-full')
-        })
-        document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function (item) {
-            item.addEventListener('click', function (e) {
-                e.preventDefault()
-                const parent = item.closest('.group')
-                if (parent.classList.contains('selected')) {
-                    parent.classList.remove('selected')
-                } else {
-                    document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function (i) {
-                        i.closest('.group').classList.remove('selected')
-                    })
-                    parent.classList.add('selected')
-                }
-            })
-        })
+    <script src="../../public/assets/js/dashboard.js"></script>
 
 
-
-        const popperInstance = {}
-        document.querySelectorAll('.dropdown').forEach(function (item, index) {
-            const popperId = 'popper-' + index
-            const toggle = item.querySelector('.dropdown-toggle')
-            const menu = item.querySelector('.dropdown-menu')
-            menu.dataset.popperId = popperId
-            popperInstance[popperId] = Popper.createPopper(toggle, menu, {
-                modifiers: [
-                    {
-                        name: 'offset',
-                        options: {
-                            offset: [0, 8],
-                        },
-                    },
-                    {
-                        name: 'preventOverflow',
-                        options: {
-                            padding: 24,
-                        },
-                    },
-                ],
-                placement: 'bottom-end'
-            });
-        })
-        document.addEventListener('click', function (e) {
-            const toggle = e.target.closest('.dropdown-toggle')
-            const menu = e.target.closest('.dropdown-menu')
-            if (toggle) {
-                const menuEl = toggle.closest('.dropdown').querySelector('.dropdown-menu')
-                const popperId = menuEl.dataset.popperId
-                if (menuEl.classList.contains('hidden')) {
-                    hideDropdown()
-                    menuEl.classList.remove('hidden')
-                    showPopper(popperId)
-                } else {
-                    menuEl.classList.add('hidden')
-                    hidePopper(popperId)
-                }
-            } else if (!menu) {
-                hideDropdown()
-            }
-        })
-
-        function hideDropdown() {
-            document.querySelectorAll('.dropdown-menu').forEach(function (item) {
-                item.classList.add('hidden')
-            })
-        }
-        function showPopper(popperId) {
-            popperInstance[popperId].setOptions(function (options) {
-                return {
-                    ...options,
-                    modifiers: [
-                        ...options.modifiers,
-                        { name: 'eventListeners', enabled: true },
-                    ],
-                }
-            });
-            popperInstance[popperId].update();
-        }
-        function hidePopper(popperId) {
-            popperInstance[popperId].setOptions(function (options) {
-                return {
-                    ...options,
-                    modifiers: [
-                        ...options.modifiers,
-                        { name: 'eventListeners', enabled: false },
-                    ],
-                }
-            });
-        }
-        // end: Popper
+   
 
         
 
