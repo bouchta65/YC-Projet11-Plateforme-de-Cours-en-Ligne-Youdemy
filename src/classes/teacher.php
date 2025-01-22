@@ -94,16 +94,7 @@ class Teacher extends User {
         return null; 
     }
 
-    public function getCategoryById(PDO $conn , int $categoryId): Category{
-        $sql="SELECT * from Category where idCategory = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(1,$categoryId,PDO::PARAM_INT);
-        $stmt->execute();
-        $row = $stmt->fetch(PDO::FETCH_NUM);
-        $category = new Category($row[0],$row[1]);
-        return $category;
-
-    }
+   
 
     public function getTagById(PDO $conn , int $tagId): tag{
         $sql="SELECT * from tag where idTag = ?";
@@ -115,5 +106,85 @@ class Teacher extends User {
         return $tag;
 
     }
+
+    public function getStatistics(PDO $conn):array{
+        $statistics = [];
+    
+        $sqlTotalCourses = "SELECT COUNT(*) AS teacherCourses FROM cours where idTeacher = ?";
+        $stmtTotalCourses = $conn->prepare($sqlTotalCourses);
+        $stmtTotalCourses->bindValue(1,$this->idUser,PDO::PARAM_INT);
+        $stmtTotalCourses->execute();
+        $totalCourses = $stmtTotalCourses->fetch(PDO::FETCH_ASSOC)['teacherCourses'];
+        $statistics['teacherCourses'] = $totalCourses;
+
+        $sqlTotalStudent = "SELECT COUNT(user.idUser) AS studentsTotal FROM cours join courseinscription on cours.idCours = courseinscription.idCours 
+        join user on courseinscription.idStudent = user.idUser  where idTeacher = ?";
+        $stmtTotalStudent = $conn->prepare($sqlTotalStudent);
+        $stmtTotalStudent->bindValue(1,$this->idUser,PDO::PARAM_INT);
+        $stmtTotalStudent->execute();
+        $totalStudent = $stmtTotalStudent->fetch(PDO::FETCH_ASSOC)['studentsTotal'];
+        $statistics['studentsTotal'] = $totalStudent;
+
+        $sqlPopularCourse = "SELECT cours.titre, COUNT(courseinscription.idStudent) as student_count FROM cours JOIN courseinscription ON cours.idCours = courseinscription.idCours
+        WHERE idTeacher = ? 
+        GROUP BY cours.titre
+        ORDER BY student_count DESC LIMIT 1";
+        $stmtPopularCourse = $conn->prepare($sqlPopularCourse);
+        $stmtPopularCourse->bindValue(1, $this->idUser, PDO::PARAM_INT);
+        $stmtPopularCourse->execute();
+        $popularCourseData = $stmtPopularCourse->fetch(PDO::FETCH_ASSOC);
+
+        if ($popularCourseData) {
+            $popularCourse = $popularCourseData['titre'];
+        } else {
+            $popularCourse = "No cours data";
+        }
+        $statistics['popular_course'] = $popularCourse;
+    
+        return $statistics;
+    }
+
+    public function deleteStudent(PDO $conn, int $idCours ,int $idStudent):void{
+        $courseIsc = new Cours_inscription($idCours , $idStudent);
+        $courseIsc->removeStudentFromCourse($conn);
+    }
+
+
+    public static function getInstructorName(PDO $conn, int $idTeacher): string {
+        $sql = "SELECT username FROM user WHERE idUser = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(1, $idTeacher, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($result) {
+            return $result['username'];
+        } else {
+            return null; 
+        }
+    }
+
+
+    
+    public static function getActiveTeachers($conn) {
+        $sql = "SELECT * FROM user WHERE role = 'Teacher' AND statut = 'Active'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public static function getPendingTeachers($conn) {
+        $sql = "SELECT * FROM user WHERE role = 'Teacher' AND statut = 'Pending'";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    
+
+
+    
 }
 ?>

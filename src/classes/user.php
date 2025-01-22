@@ -128,7 +128,7 @@ abstract class User{
                 }else if($user['role']=="Teacher"){
                     $_SESSION['user'] = serialize(new Teacher($user['idUser'],$user['username'],$user['email'],$user['password'],$user['role'],$user['statut'],$user['image'],$user['address'],$user['phone']));
                     echo "good";
-                    header('Location: ../views/TeacherCourses.php'); 
+                    header('Location: ../views/dashboard.php'); 
                 }else{
                     $_SESSION['user'] = serialize(new Admin($user['idUser'],$user['username'],$user['email'],$user['password'],$user['role'],$user['statut'],$user['image'],$user['address'],$user['phone']));
                     header('Location: ../views/dashboard.php'); 
