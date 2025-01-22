@@ -3,6 +3,7 @@
 class Category {
     private int $idCategory;
     private string $categoryName;
+    private array $courses= [];
 
     public function __construct(int $idCategory, string $categoryName) {
         $this->idCategory = $idCategory;
@@ -49,6 +50,9 @@ class Category {
     }
 
     
+    public function getCoursesCategory(): array {
+        return $this->courses;
+    }
     
 }
 ?>
