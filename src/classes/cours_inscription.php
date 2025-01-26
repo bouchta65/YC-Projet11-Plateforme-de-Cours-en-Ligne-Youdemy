@@ -15,6 +15,8 @@ class Cours_inscription {
         public function getIdStudent(): int {
             return $this->idStudent;
         }
+
+
     
         public function addStudentToCourse(PDO $conn): void {
             $sql = "INSERT INTO courseinscription (idCours, idStudent) VALUES (?, ?)";
