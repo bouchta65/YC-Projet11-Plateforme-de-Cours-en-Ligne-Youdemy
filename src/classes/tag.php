@@ -39,6 +39,14 @@ class Tag {
         $stmt->execute();
     }
 
+    public function saveCoursTag(PDO $conn,int $idCours): void {
+        $sql = "INSERT INTO cours_tag (idCours, idTag) VALUES (?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue(1,$idCours, PDO::PARAM_INT);
+        $stmt->bindValue(2,$this->idTag, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
     
 }
 ?>

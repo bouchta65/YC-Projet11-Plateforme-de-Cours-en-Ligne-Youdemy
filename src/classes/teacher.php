@@ -149,7 +149,6 @@ class Teacher extends User {
         $courseIsc->removeStudentFromCourse($conn);
     }
 
-
     public static function getInstructorName(PDO $conn, int $idTeacher): string {
         $sql = "SELECT username FROM user WHERE idUser = ?";
         $stmt = $conn->prepare($sql);

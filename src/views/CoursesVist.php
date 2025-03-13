@@ -431,7 +431,7 @@ $isLoggedIn = isset($_SESSION['user']);
 
   const totalPages = Math.ceil(courses.length / itemsPerPage);
   createPaginationButtons(totalPages);
-  displayCourses(1); // Display the first page by default
+  displayCourses(1);
 </script>
 </body>
 </html> 

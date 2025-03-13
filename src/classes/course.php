@@ -87,13 +87,19 @@ abstract class Course {
         $this->date_creation = $date_creation;
     }
 
-    public static function getAllCourses(PDO $conn): array{
-        $sql = " SELECT c.* ,t.username,count(ci.idStudent) as student_count from cours c left join courseinscription ci on c.idCours = ci.idCours 
-       left join user s on ci.idStudent = s.idUser join user t on  t.idUser = c.idTeacher GROUP BY c.idCours";
+    abstract public function saveCourse(PDO $conn): void;
+    abstract public function updateCourse(PDO $conn): void;
+    abstract public function getCourseType(): string;
+    abstract public function setUrl(string $filrUrl): void;
+    abstract public function getContenu(): string;
+
+  
+
+    public function deleteCourse(PDO $conn): void{
+        $sql = "DELETE from cours where idCours = ?";
         $stmt = $conn->prepare($sql);
+        $stmt->bindValue(1,$this->idCours,PDO::PARAM_INT);
         $stmt->execute();
-        $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $courses;
     }
 
     public static function topCourses(PDO $conn): array {
@@ -110,14 +116,6 @@ abstract class Course {
         $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $courses;
     }
-    
-
-    public function deleteCourse(PDO $conn): void{
-        $sql = "DELETE from cours where idCours = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(1,$this->idCours,PDO::PARAM_INT);
-        $stmt->execute();
-    }
 
     public static function getCourseById(PDO $conn, int $courseId): ?array {
         $sql = "SELECT * FROM cours WHERE idCours = ?";
@@ -131,14 +129,17 @@ abstract class Course {
     }
     
     
-
+    public static function getAllCourses(PDO $conn): array{
+        $sql = " SELECT c.* ,t.username,count(ci.idStudent) as student_count from cours c left join courseinscription ci on c.idCours = ci.idCours 
+       left join user s on ci.idStudent = s.idUser join user t on  t.idUser = c.idTeacher GROUP BY c.idCours";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $courses;
+    }
   
 
-    abstract public function saveCourse(PDO $conn): void;
-    abstract public function updateCourse(PDO $conn): void;
-    abstract public function getCourseType(): string;
-    abstract public function setUrl(string $filrUrl): void;
-    abstract public function getContenu(): string;
+
 
 
     

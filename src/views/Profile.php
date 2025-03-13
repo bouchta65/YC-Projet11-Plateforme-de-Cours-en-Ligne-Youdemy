@@ -114,7 +114,7 @@ if (isset($_POST['updateProfileForm'])) {
                 </a>
             </li>
             <li class="mb-1 group">
-                <a href="Profile.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 ">
+                <a href="users.php" class="flex font-semibold items-center py-2 px-4 text-gray-900 hover:bg-gray-950 hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 ">
                     <i class='bx bx-user mr-3 text-lg'></i>                
                     <span class="text-sm">Users</span>
                 </a>
@@ -232,13 +232,12 @@ if (isset($_POST['updateProfileForm'])) {
             <input type="text" id="username" name="username" value="<?php echo $user->getusername()?>" disabled class="mt-2 w-full p-3 border rounded-md bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
-        <!-- Email -->
+        
         <div>
             <label for="email" class="block text-sm font-medium text-gray-600">Email</label>
             <input type="email" id="email" name="email" value="<?php echo $user->getEmail()?>" disabled class="mt-2 w-full p-3 border rounded-md bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
-        <!-- Role -->
         <div>
             <label for="role" class="block text-sm font-medium text-gray-600">Role</label>
             <input type="text" id="role" name="role" value="<?php echo $user->getRole()?>" disabled class="mt-2 w-full p-3 border rounded-md bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -249,13 +248,13 @@ if (isset($_POST['updateProfileForm'])) {
             <input type="text" id="phone" name="phone" value="<?php echo $user->getPhone()?>" disabled class="mt-2 w-full p-3 border rounded-md bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
-        <!-- Address -->
+        
         <div class="col-span-1 sm:col-span-2">
             <label for="address" class="block text-sm font-medium text-gray-600">Address</label>
             <input type="text" id="address" name="address" value="<?php echo $user->getAddress()?>" disabled class="mt-2 w-full p-3 border rounded-md bg-gray-50 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
         </div>
 
-        <!-- Update Profile Button -->
+        
         <div class="col-span-1 sm:col-span-2 lg:col-span-3 flex justify-end">
             <button type="button" id="changeProfile" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
                 Update Profile
